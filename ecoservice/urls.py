@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from doacoes.views import listar_doacoes
+from doacoes.views import listar_doacoes, buscar_doacao
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('doacoes/', listar_doacoes),
+    path('doacoes/<int:id>', buscar_doacao)
 ]
