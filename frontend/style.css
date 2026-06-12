@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f9f4; /* Verde bem clarinho */
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #2e7d32; /* Verde escuro */
+}
+
+/* Estilos da Tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Estilo do botão de deletar */
+.btn-deletar {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-deletar:hover {
+    background-color: #d32f2f;
+}
+
+.form-container {
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1; /* Faz os inputs dividirem o espaço */
+    min-width: 150px;
+}
+
+.btn-criar {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-criar:hover {
+    background-color: #388e3c;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+}
+
+/* Estilo do botão de editar */
+.btn-editar {
+    background-color: #ff9800; /* Laranja */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.btn-editar:hover {
+    background-color: #f57c00;
+}
