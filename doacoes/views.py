@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Doacao
 
 # ==========================================
-# CREATE (Parte Caio - Criar Doação)
+# C - CREATE (Parte Caio - Criar Doação)
 # ==========================================
 @csrf_exempt
 def criar_doacao(request):
@@ -23,7 +23,7 @@ def criar_doacao(request):
     return JsonResponse({"erro": "Método não permitido. Use POST."}, status=405)
 
 # ==========================================
-# READ (Parte Samuel - Ler Doações)
+# R - READ (Parte Samuel - Ler Doações)
 # ==========================================
 def listar_doacoes(request):
     doacoes = Doacao.objects.all()
@@ -53,22 +53,8 @@ def buscar_doacao(request, id):
         return JsonResponse({"erro": "Doação não encontrada"}, status=404)
 
 # ==========================================
-# DELETE (Parte Spinola - Deletar Doação)
+# U - UPDATE (Parte Rodrigo - Editar Doação)
 # ==========================================
-@csrf_exempt
-def deletar_doacao(request, id):
-    if request.method == 'DELETE':
-        try:
-            doacao = Doacao.objects.get(id=id)
-            doacao.delete()
-            return JsonResponse({"mensagem": "Doação excluída com sucesso!"})
-        except Doacao.DoesNotExist:
-            return JsonResponse({"erro": "Doação não encontrada."}, status=404)
-            
-    return JsonResponse({"erro": "Método não permitido. Use DELETE."}, status=405)
-    #=========================================
-# UPDATE (parte Rodrigo - Editar Doação)
-#=========================================
 @csrf_exempt
 def editar_doacao(request, id):
     if request.method == 'PUT':
@@ -82,8 +68,23 @@ def editar_doacao(request, id):
 
             return JsonResponse({"mensagem": "Doação atualizada com sucesso."})
         except Doacao.DoesNotExist:
-            return JsonResponse({"erro: Doação não encotrada."}, status=404)
+            return JsonResponse({"erro": "Doação não encontrada."}, status=404)
         except Exception as e:
-            return JsonResponse({"erro": str(e)}, status=404)
+            return JsonResponse({"erro": str(e)}, status=400)
         
-        return sonResponse({"erro": "Metodo não permitido. use PUT."}, status=400)
+    return JsonResponse({"erro": "Método não permitido. Use PUT."}, status=405)
+
+# ==========================================
+# D - DELETE (Parte Spinola - Deletar Doação)
+# ==========================================
+@csrf_exempt
+def deletar_doacao(request, id):
+    if request.method == 'DELETE':
+        try:
+            doacao = Doacao.objects.get(id=id)
+            doacao.delete()
+            return JsonResponse({"mensagem": "Doação excluída com sucesso!"})
+        except Doacao.DoesNotExist:
+            return JsonResponse({"erro": "Doação não encontrada."}, status=404)
+            
+    return JsonResponse({"erro": "Método não permitido. Use DELETE."}, status=405)
