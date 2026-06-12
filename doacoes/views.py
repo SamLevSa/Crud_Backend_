@@ -15,6 +15,7 @@ def criar_doacao(request):
                 nome_alimento=dados['nome_alimento'],
                 quantidade=dados['quantidade'],
                 data_validade=dados['data_validade']
+                destino=dados.get('destino', 'Estoque Interno')
             )
             return JsonResponse({"mensagem": "Doação criada com sucesso!", "id": nova_doacao.id}, status=201)
         except Exception as e:
@@ -34,6 +35,7 @@ def listar_doacoes(request):
             "nome_alimento": doacao.nome_alimento,
             "quantidade": doacao.quantidade,
             "data_validade": str(doacao.data_validade),
+            "destino": doacao.destino,
             "data_entrada": str(doacao.data_entrada),
         })
     return JsonResponse(resultado, safe=False)
@@ -64,6 +66,7 @@ def editar_doacao(request, id):
             doacao.nome_alimento = dados['nome_alimento']
             doacao.quantidade = dados['quantidade']
             doacao.data_validade = dados['data_validade']
+            doacao.destino = dados['destino']
             doacao.save()
 
             return JsonResponse({"mensagem": "Doação atualizada com sucesso."})
