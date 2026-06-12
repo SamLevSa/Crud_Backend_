@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Doacao
 
 # ==========================================
-# C - CREATE (Parte Caio - Criar Doação)
+# C - Parte de Caio (CREATE)
 # ==========================================
 @csrf_exempt
 def criar_doacao(request):
@@ -14,7 +14,7 @@ def criar_doacao(request):
             nova_doacao = Doacao.objects.create(
                 nome_alimento=dados['nome_alimento'],
                 quantidade=dados['quantidade'],
-                data_validade=dados['data_validade']
+                data_validade=dados['data_validade'],
                 destino=dados.get('destino', 'Estoque Interno')
             )
             return JsonResponse({"mensagem": "Doação criada com sucesso!", "id": nova_doacao.id}, status=201)
@@ -24,7 +24,7 @@ def criar_doacao(request):
     return JsonResponse({"erro": "Método não permitido. Use POST."}, status=405)
 
 # ==========================================
-# R - READ (Parte Samuel - Ler Doações)
+# R - Parte de Samuel (READ)
 # ==========================================
 def listar_doacoes(request):
     doacoes = Doacao.objects.all()
@@ -48,6 +48,7 @@ def buscar_doacao(request, id):
             "nome_alimento": doacao.nome_alimento,
             "quantidade": doacao.quantidade,
             "data_validade": str(doacao.data_validade),
+            "destino": doacao.destino,
             "data_entrada": str(doacao.data_entrada),
         }
         return JsonResponse(dados)
@@ -55,7 +56,7 @@ def buscar_doacao(request, id):
         return JsonResponse({"erro": "Doação não encontrada"}, status=404)
 
 # ==========================================
-# U - UPDATE (Parte Rodrigo - Editar Doação)
+# U - Parte de Rodrigo (UPDATE)
 # ==========================================
 @csrf_exempt
 def editar_doacao(request, id):
@@ -66,7 +67,7 @@ def editar_doacao(request, id):
             doacao.nome_alimento = dados['nome_alimento']
             doacao.quantidade = dados['quantidade']
             doacao.data_validade = dados['data_validade']
-            doacao.destino = dados['destino']
+            doacao.destino = dados.get('destino', doacao.destino)
             doacao.save()
 
             return JsonResponse({"mensagem": "Doação atualizada com sucesso."})
@@ -78,7 +79,7 @@ def editar_doacao(request, id):
     return JsonResponse({"erro": "Método não permitido. Use PUT."}, status=405)
 
 # ==========================================
-# D - DELETE (Parte Spinola - Deletar Doação)
+# D - Parte de Matheus (DELETE)
 # ==========================================
 @csrf_exempt
 def deletar_doacao(request, id):
