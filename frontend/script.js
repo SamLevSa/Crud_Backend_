@@ -154,14 +154,16 @@ function pesquisarDoacao() {
     const linhas = document.querySelectorAll('#area-doacoes tbody tr');
     
     linhas.forEach(linha => {
+        // Coluna 0 é o ID, Coluna 1 é o Nome do Alimento
+        const idDoacao = linha.cells[0].innerText.toLowerCase();
         const nomeAlimento = linha.cells[1].innerText.toLowerCase();
         
-        if (nomeAlimento.includes(termo)) {
+        // Verifica se o termo está no ID OU no Nome
+        if (idDoacao.includes(termo) || nomeAlimento.includes(termo)) {
             linha.style.display = '';
         } else {
             linha.style.display = 'none';
         }
     });
 }
-
 carregarDoacoes();
