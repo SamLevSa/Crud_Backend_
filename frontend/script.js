@@ -1,19 +1,13 @@
-// O endereço do nosso Backend (Django)
 const API_URL = 'http://127.0.0.1:8000/doacoes/';
 
-// Variáveis globais para controlar a edição
 let doacaoEditandoId = null;
 let listaDoacoesGlobais = []; 
 
-// ==========================================
-// R - READ: Buscar e exibir as doações
-// ==========================================
 async function carregarDoacoes() {
     try {
         const resposta = await fetch(API_URL);
         const doacoes = await resposta.json();
         
-        // Salva na variável global para usarmos na hora de editar
         listaDoacoesGlobais = doacoes; 
 
         const areaDoacoes = document.getElementById('area-doacoes');
@@ -31,6 +25,7 @@ async function carregarDoacoes() {
                         <th>Alimento</th>
                         <th>Quantidade</th>
                         <th>Validade</th>
+                        <th>Destino</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -44,6 +39,7 @@ async function carregarDoacoes() {
                     <td>${doacao.nome_alimento}</td>
                     <td>${doacao.quantidade}</td>
                     <td>${doacao.data_validade}</td>
+                    <td>${doacao.destino}</td>
                     <td>
                         <button class="btn-editar" onclick="prepararEdicao(${doacao.id})">Editar</button>
                         <button class="btn-deletar" onclick="deletarDoacao(${doacao.id})">Deletar</button>
@@ -61,15 +57,12 @@ async function carregarDoacoes() {
 
     } catch (erro) {
         console.error("Erro ao carregar doações:", erro);
-        document.getElementById('area-doacoes').innerHTML = '<p>Erro ao conectar com o servidor Django. O servidor está rodando?</p>';
+        document.getElementById('area-doacoes').innerHTML = '<p>Erro ao conectar com o servidor Django.</p>';
     }
 }
 
-// ==========================================
-// C e U - CREATE e UPDATE: Salvar Formulário
-// ==========================================
 document.getElementById('form-criar').addEventListener('submit', async function(event) {
-    event.preventDefault(); // Evita que a página recarregue
+    event.preventDefault(); 
 
     const nome = document.getElementById('nome_alimento').value;
     const quantidade = document.getElementById('quantidade').value;
@@ -85,9 +78,8 @@ document.getElementById('form-criar').addEventListener('submit', async function(
 
     try {
         let urlDestino = API_URL + 'criar/';
-        let metodo = 'POST'; // Padrão é criar
+        let metodo = 'POST'; 
 
-        // Se tiver um ID na variável, significa que estamos EDITANDO (UPDATE)
         if (doacaoEditandoId !== null) {
             urlDestino = API_URL + `editar/${doacaoEditandoId}/`;
             metodo = 'PUT';
@@ -104,12 +96,10 @@ document.getElementById('form-criar').addEventListener('submit', async function(
         if (resposta.ok) {
             alert(doacaoEditandoId ? '✏️ Doação atualizada com sucesso!' : '🌱 Doação cadastrada com sucesso!');
             
-            // Limpa o formulário e reseta o modo de edição
             document.getElementById('form-criar').reset();
             doacaoEditandoId = null;
-            document.querySelector('.btn-criar').innerText = 'Salvar Doação'; // Volta o texto original
+            document.querySelector('.btn-criar').innerText = 'Salvar Doação'; 
             
-            // Recarrega a tabela com os dados novos
             carregarDoacoes(); 
         } else {
             const erro = await resposta.json();
@@ -121,35 +111,22 @@ document.getElementById('form-criar').addEventListener('submit', async function(
     }
 });
 
-// ==========================================
-// Função auxiliar para o UPDATE
-// ==========================================
 function prepararEdicao(id) {
-    // Procura a doação na nossa lista global
     const doacao = listaDoacoesGlobais.find(d => d.id === id);
     
     if (doacao) {
-        // Preenche os campos do formulário com os dados dela
         document.getElementById('nome_alimento').value = doacao.nome_alimento;
         document.getElementById('quantidade').value = doacao.quantidade;
         document.getElementById('data_validade').value = doacao.data_validade;
+        document.getElementById('destino').value = doacao.destino;
 
-        // Ativa o "Modo Edição"
         doacaoEditandoId = id;
-        
-        // Muda o visual do botão para o usuário saber o que está fazendo
         document.querySelector('.btn-criar').innerText = 'Atualizar Doação';
-        
-        // Joga a tela lá pro topo (onde fica o formulário)
         window.scrollTo(0, 0); 
     }
 }
 
-// ==========================================
-// D - DELETE: Deletar Doação
-// ==========================================
 async function deletarDoacao(id) {
-    // Pede confirmação antes de apagar
     const confirmar = confirm("Tem certeza que deseja apagar esta doação?");
     
     if (!confirmar) return;
@@ -161,7 +138,7 @@ async function deletarDoacao(id) {
 
         if (resposta.ok) {
             alert("🗑️ Doação apagada com sucesso!");
-            carregarDoacoes(); // Recarrega a tabela
+            carregarDoacoes(); 
         } else {
             alert("Erro ao apagar doação.");
         }
@@ -171,24 +148,14 @@ async function deletarDoacao(id) {
     }
 }
 
-// Chama a função automaticamente assim que a página abre
-carregarDoacoes();
-
-// ==========================================
-// P - PESQUISA: Filtrar alimentos na tabela
-// ==========================================
+// FUNÇÃO DA BARRA DE PESQUISA
 function pesquisarDoacao() {
-    // Pega o que o usuário digitou e converte para minúsculo
     const termo = document.getElementById('input-pesquisa').value.toLowerCase();
-    
-    // Pega todas as linhas da tabela (dentro do tbody)
     const linhas = document.querySelectorAll('#area-doacoes tbody tr');
     
     linhas.forEach(linha => {
-        // A célula [1] é a coluna do "Alimento"
         const nomeAlimento = linha.cells[1].innerText.toLowerCase();
         
-        // Se o nome incluir o que foi digitado, mostra a linha. Se não, esconde.
         if (nomeAlimento.includes(termo)) {
             linha.style.display = '';
         } else {
@@ -196,3 +163,5 @@ function pesquisarDoacao() {
         }
     });
 }
+
+carregarDoacoes();
