@@ -24,4 +24,5 @@ urlpatterns = [
     path('doacoes/', listar_doacoes),
     path('doacoes/<int:id>/', buscar_doacao),
     path('doacoes/deletar/<int:id>/', deletar_doacao),
+    path(('doacoes/editar/<int:id>/', edotar_doacao)),
 ]

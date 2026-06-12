@@ -66,3 +66,24 @@ def deletar_doacao(request, id):
             return JsonResponse({"erro": "Doação não encontrada."}, status=404)
             
     return JsonResponse({"erro": "Método não permitido. Use DELETE."}, status=405)
+    #=========================================
+# UPDATE (parte Rodrigo - Editar Doação)
+#=========================================
+@csrf_exempt
+def editar_doacao(request, id):
+    if request.method == 'PUT':
+        try:
+            doacao = Doacao.objects.get(id=id)
+            dados = json.loads(request.body)
+            doacao.nome_alimento = dados['nome_alimento']
+            doacao.quantidade = dados['quantidade']
+            doacao.data_validade = dados['data_validade']
+            doacao.save()
+
+            return JsonResponse({"mensagem": "Doação atualizada com sucesso."})
+        except Doacao.DoesNotExist:
+            return JsonResponse({"erro: Doação não encotrada."}, status=404)
+        except Exception as e:
+            return JsonResponse({"erro": str(e)}, status=404)
+        
+        return sonResponse({"erro": "Metodo não permitido. use PUT."}, status=400)
