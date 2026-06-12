@@ -74,11 +74,13 @@ document.getElementById('form-criar').addEventListener('submit', async function(
     const nome = document.getElementById('nome_alimento').value;
     const quantidade = document.getElementById('quantidade').value;
     const validade = document.getElementById('data_validade').value;
+    const destino = document.getElementById('destino').value;
 
     const dados = {
         nome_alimento: nome,
         quantidade: parseInt(quantidade),
-        data_validade: validade
+        data_validade: validade,
+        destino: destino
     };
 
     try {
@@ -171,3 +173,26 @@ async function deletarDoacao(id) {
 
 // Chama a função automaticamente assim que a página abre
 carregarDoacoes();
+
+// ==========================================
+// P - PESQUISA: Filtrar alimentos na tabela
+// ==========================================
+function pesquisarDoacao() {
+    // Pega o que o usuário digitou e converte para minúsculo
+    const termo = document.getElementById('input-pesquisa').value.toLowerCase();
+    
+    // Pega todas as linhas da tabela (dentro do tbody)
+    const linhas = document.querySelectorAll('#area-doacoes tbody tr');
+    
+    linhas.forEach(linha => {
+        // A célula [1] é a coluna do "Alimento"
+        const nomeAlimento = linha.cells[1].innerText.toLowerCase();
+        
+        // Se o nome incluir o que foi digitado, mostra a linha. Se não, esconde.
+        if (nomeAlimento.includes(termo)) {
+            linha.style.display = '';
+        } else {
+            linha.style.display = 'none';
+        }
+    });
+}
